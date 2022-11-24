@@ -1,0 +1,39 @@
+@model Cadeteria.Models.PedidoViewModel
+
+@{
+    ViewData["Title"] = "EditarPedido";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    @using(Html.BeginForm("EditarPedido", "CadeteriaHub", FormMethod.Post))
+    {
+        <section class="form-group">
+            <label for="Estado">Estado Del Pedido: </label>
+            <input type="text" name="Estado" class="form-control" placeholder="@Model.Pedido.Estado">
+        </section>
+        <section class="form-group">
+            <label for="Nombre">Nombre del cliente: </label>
+            <input type="text" name="Nombre" class="form-control" placeholder="@Model.Pedido.Cliente.Nombre">
+        </section>
+        <section class="form-group">
+            <label for="Telefono">Telefono del cliente: </label>
+            <input type="phone" name="Telefono" class="form-control" placeholder="@Model.Pedido.Cliente.Telefono">
+        </section>
+        <section class="form-group">
+            <label for="Direccion">Direccion del cliente: </label>
+            <input type="text" name="Direccion" class="form-control" placeholder="@Model.Pedido.Cliente.Direccion">
+        </section>
+        <section class="form-group">
+            <label for="Observacion">Observacion: </label>
+            <input type="text" name="Observacion" class="form-control" placeholder="@Model.Pedido.Obs">
+        </section>
+        <section class="form-group">
+            <label for="cadete">Id del cadete: </label>
+            <input type="number" name="cadete" class="form-control" placeholder="@Model.Cadete.Id" min="0">
+        </section>
+            <input type="hidden" name="id" value=@Model.Pedido.Nro >
+            <button type="submit" class="btn btn-primary">Enviar</button>
+    }
+</div>

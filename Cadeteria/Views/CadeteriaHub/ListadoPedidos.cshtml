@@ -1,0 +1,47 @@
+@model List<Cadeteria.Models.PedidoViewModel>
+@{
+    ViewData["Title"] = "Listado";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table table-bordered table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>Pedido nro</th>
+            <th>Estado</th>
+            <th>Cliente</th>
+            <th>Direccion</th>
+            <th>Obs</th>
+            <th>Cadete Asignado</th>
+        </tr>
+    </thead>
+    <tbody class="table-striped" >
+        @foreach (var data in Model)
+        {
+            <tr>
+                <td>@data.Pedido.Nro</td>
+                <td>@data.Pedido.Estado</td>
+                <td>@data.Pedido.Cliente.Nombre</td>
+                <td>@data.Pedido.Cliente.Direccion</td>
+                <td>@data.Pedido.Obs</td>
+                <td>@data.Cadete.Nombre</td>
+                <td>@using(Html.BeginForm("BorrarPedido", "CadeteriaHub", FormMethod.Get))
+                    {
+                        <input type="hidden" name="id" value=@data.Pedido.Nro >
+                        <input type="submit" value="Borrar" class="btn btn-primary">
+                    }</td>
+                <td>@using(Html.BeginForm("EditPedido", "CadeteriaHub", FormMethod.Get))
+                    {
+                        <input type="hidden" name="id" value=@data.Pedido.Nro >
+                        <input type="submit" value="Editar" class="btn btn-primary">
+                    }</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<section class="btn-group">
+        <a href="AltaPedido" class="btn btn-primary btn-sm">Agregar Pedido</a>
+        <a href="BajaPedido" class="btn btn-primary btn-sm">Borrar Pedido</a>
+</section>
