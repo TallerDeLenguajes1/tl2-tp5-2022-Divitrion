@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Cadeteria.Models;
+using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 
 namespace Cadeteria.Controllers;
 
@@ -9,6 +11,11 @@ public class CadeteriaHubController : Controller
     private readonly ILogger<CadeteriaHubController> _logger;
     private static CadeteriaWeb cadeteria = new CadeteriaWeb();
     private static List<PedidoViewModel> listaViewModel = new List<PedidoViewModel>();
+
+    static string connectionString = "Data Source=DB/PedidosDB.db;Cache=Shared";
+    SqliteConnection connection = new SqliteConnection(connectionString);
+    SqliteDataReader lector;
+
 
     public CadeteriaHubController(ILogger<CadeteriaHubController> logger)
     {
