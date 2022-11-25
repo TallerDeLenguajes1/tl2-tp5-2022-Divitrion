@@ -20,20 +20,20 @@
         @foreach (var data in Model)
         {
             <tr>
-                <td>@data.Pedido.Nro</td>
-                <td>@data.Pedido.Estado</td>
-                <td>@data.Pedido.Cliente.Nombre</td>
-                <td>@data.Pedido.Cliente.Direccion</td>
-                <td>@data.Pedido.Obs</td>
-                <td>@data.Cadete.Nombre</td>
+                <td>@data.Nro</td>
+                <td>@data.Estado</td>
+                <td>@data.NombreCliente</td>
+                <td>@data.DireccionCliente</td>
+                <td>@data.Obs</td>
+                <td>@data.NombreCadete</td>
                 <td>@using(Html.BeginForm("BorrarPedido", "CadeteriaHub", FormMethod.Get))
                     {
-                        <input type="hidden" name="id" value=@data.Pedido.Nro >
+                        <input type="hidden" name="id" value=@data.Nro >
                         <input type="submit" value="Borrar" class="btn btn-primary">
                     }</td>
                 <td>@using(Html.BeginForm("EditPedido", "CadeteriaHub", FormMethod.Get))
                     {
-                        <input type="hidden" name="id" value=@data.Pedido.Nro >
+                        <input type="hidden" name="id" value=@data.Nro >
                         <input type="submit" value="Editar" class="btn btn-primary">
                     }</td>
             </tr>
