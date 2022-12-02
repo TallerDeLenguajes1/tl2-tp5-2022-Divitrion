@@ -21,10 +21,5 @@ namespace Cadeteria.Models
             this.Id=id++;
             this.listadoPedidos=new List<Pedido>();
         }
-
-        public void recibirPedido(Pedido pedido)
-        {
-            listadoPedidos.Add(pedido);
-        }
     }
 }
