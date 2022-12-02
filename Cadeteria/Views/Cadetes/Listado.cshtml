@@ -19,7 +19,7 @@
         @foreach (var cadete in Model)
         {
             <tr>
-                <td>@cadete.Id</td>
+                <td>@cadete.id</td>
                 <td>@cadete.Nombre</td>
                 <td>@cadete.Telefono</td>
                 <td>@cadete.Direccion</td>
@@ -27,7 +27,7 @@
                 <td>
                     @using(Html.BeginForm("Borrar", "CadeteriaHub", FormMethod.Get))
                     {
-                        <input type="hidden" name="id" value=@cadete.Id >
+                        <input type="hidden" name="id" value=@cadete.id >
                         <input type="submit" value="Borrar" class="btn btn-primary">
                     }
                 </td>

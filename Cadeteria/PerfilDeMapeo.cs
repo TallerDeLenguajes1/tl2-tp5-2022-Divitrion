@@ -1,8 +1,8 @@
-using Automapper;
+using AutoMapper;
 using Cadeteria.Models;
-using Cadeteria.Viewmodels;
+using Cadeteria.ViewModels;
 
-public class PerfilDeMapeo 
+public class PerfilDeMapeo : Profile
 {
     public PerfilDeMapeo()
     {

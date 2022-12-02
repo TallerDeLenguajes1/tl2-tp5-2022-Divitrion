@@ -50,7 +50,7 @@ namespace Cadeteria.Repositorios
                 {
                     pedido.Nro = Convert.ToInt32(reader["Nro"]);
                     pedido.Obs = reader["Obs"].ToString();
-                    pedido.clienteID = Convert.ToInt32(reader["Cliente"]);
+                    pedido.ClienteID = Convert.ToInt32(reader["Cliente"]);
                     pedido.Estado = reader["Estado"].ToString();
                 }
             }
@@ -73,7 +73,7 @@ namespace Cadeteria.Repositorios
         {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"UPDATE Pedidos SET Obs = '{pedido.Obs}', Estado = '{pedido.Estado}',  ClienteID = '{pedido.Clienteid}', CadeteID = '{pedido.cadeteID}' WHERE Nro = '{pedido.Nro}';";
+            command.CommandText = $"UPDATE Pedidos SET Obs = '{pedido.Obs}', Estado = '{pedido.Estado}',  ClienteID = '{pedido.ClienteID}', CadeteID = '{pedido.CadeteID}' WHERE Nro = '{pedido.Nro}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();

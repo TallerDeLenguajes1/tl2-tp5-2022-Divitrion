@@ -10,11 +10,11 @@ namespace Cadeteria.Models
         public string DatoReferenciaDireccion;
         private int id;
 
-        public int Id { get => id; set => nro = id; }
-
 
         public Cliente()
         {
         }
+
+        public int Id { get => id; set => id = value; }
     }
 }
