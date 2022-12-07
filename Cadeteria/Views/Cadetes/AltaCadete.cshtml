@@ -1,3 +1,4 @@
+@model Cadeteria.ViewModels.CadeteViewModel
 @{
     ViewData["Title"] = "AltaCadete";
 }
@@ -5,14 +6,23 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    @using(Html.BeginForm("Carga", "CadeteriaHub", FormMethod.Post))
-    {
-        <h3>Nombre: </h3>
-        <input type="text" name="Nombre">
-        <h3>Telefono: </h3>
-        <input type="phone" name="Telefono">
-        <h3>Direccion: </h3>
-        <input type="text" name="Direccion">
+    <form asp-action="AltaCadete" asp-controller="Cadetes" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <section class="form-group">
+            <label for="Nombre">Nombre</label>
+            <input type="text" name="Nombre">
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <label for="Telefono">Telefono</label>
+            <input type="phone" name="Telefono">
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <label for="Direccion">Direccion</label>
+            <input type="text" name="Direccion">
+            <span asp-validation-for="Direccion" class="text-danger"></span>
+        </section>
         <input type="submit" value="Enviar" class="btn btn-primary">
-    }
+    </form>
 </div>

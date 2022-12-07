@@ -17,23 +17,24 @@
         </tr>
     </thead>
     <tbody class="table-striped" >
-        @foreach (var data in Model)
+        @foreach (var pedido in Model)
         {
             <tr>
-                <td>@data.Nro</td>
-                <td>@data.Estado</td>
-                <td>@data.NombreCliente</td>
-                <td>@data.DireccionCliente</td>
-                <td>@data.Obs</td>
-                <td>@data.NombreCadete</td>
-                <td>@using(Html.BeginForm("BorrarPedido", "CadeteriaHub", FormMethod.Get))
+                <td>@pedido.Nro</td>
+                <td>@pedido.Estado</td>
+                <td>@pedido.NombreCliente</td>
+                <td>@pedido.DireccionCliente</td>
+                <td>@pedido.Obs</td>
+                <td>@pedido.CadeteID</td>
+                <td>@using(Html.BeginForm("BorrarPedido", "Pedidos", FormMethod.Get))
                     {
-                        <input type="hidden" name="id" value=@data.Nro >
+                        <input type="hidden" name="id" value=@pedido.Nro >
                         <input type="submit" value="Borrar" class="btn btn-primary">
                     }</td>
-                <td>@using(Html.BeginForm("EditPedido", "CadeteriaHub", FormMethod.Get))
+                <td>@using(Html.BeginForm("EditarPedido", "Pedidos", FormMethod.Get))
                     {
-                        <input type="hidden" name="id" value=@data.Nro >
+                        <input type="hidden" name="id" value=@pedido.Nro >
+                        <input type="hidden" name="Clienteid" value=@pedido.ClienteID >
                         <input type="submit" value="Editar" class="btn btn-primary">
                     }</td>
             </tr>

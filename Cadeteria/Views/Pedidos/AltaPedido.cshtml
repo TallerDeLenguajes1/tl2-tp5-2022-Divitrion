@@ -5,7 +5,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    @using(Html.BeginForm("CargaPedido", "CadeteriaHub", FormMethod.Post))
+    @using(Html.BeginForm("CargaPedido", "Pedidos", FormMethod.Post))
     {
         <section class="form-group">
             <label for="Nombre">Nombre del cliente: </label>
@@ -24,8 +24,12 @@
             <input type="text" name="Observacion" class="form-control">
         </section>
         <section class="form-group">
-            <label for="cadete">Id del cadete: </label>
-            <input type="text" name="cadete" class="form-control">
+            <label for="Estado">Estado: </label>
+            <input type="text" name="Estado" class="form-control">
+        </section>
+        <section class="form-group">
+            <label for="CadeteId">Id del cadete: </label>
+            <input type="text" name="CadeteId" class="form-control">
         </section>
             <button type="submit" class="btn btn-primary">Enviar</button>
     }

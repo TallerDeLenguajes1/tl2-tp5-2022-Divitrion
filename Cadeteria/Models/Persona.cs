@@ -8,15 +8,16 @@ namespace Cadeteria.Models
 {
     public class Persona
     {
-        [Required]
         private string nombre;
-        [Required]
         private string direccion;
-        [Required]
         private string telefono;
 
+        [Required]
         public string Nombre { get => nombre; set => nombre = value; }
+        [Required]
         public string Direccion { get => direccion; set => direccion = value; }
+        [Required]
+        [Phone]
         public string Telefono { get => telefono; set => telefono = value; }
 
         public Persona()

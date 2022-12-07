@@ -12,7 +12,7 @@ namespace Cadeteria.Repositorios
         private string cadenaConexion = "Data Source=DB/PedidosDB.db;Cache=Shared";
         public List<Pedido> GetAll()
         {
-            var queryString = @"SELECT * FROM CADETES;";
+            var queryString = @"SELECT * FROM Pedidos;";
             List<Pedido> pedidos = new List<Pedido>();
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
@@ -26,8 +26,9 @@ namespace Cadeteria.Repositorios
                         var pedido = new Pedido();
                         pedido.Nro = Convert.ToInt32(reader["Nro"]);
                         pedido.Obs = reader["Obs"].ToString();
-                        pedido.Cliente = new Cliente();
                         pedido.Estado = reader["Estado"].ToString();
+                        pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
+                        pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
                         pedidos.Add(pedido);
                     }
                 }
@@ -50,8 +51,9 @@ namespace Cadeteria.Repositorios
                 {
                     pedido.Nro = Convert.ToInt32(reader["Nro"]);
                     pedido.Obs = reader["Obs"].ToString();
-                    pedido.ClienteID = Convert.ToInt32(reader["Cliente"]);
+                    pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
                     pedido.Estado = reader["Estado"].ToString();
+                    pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
                 }
             }
             connection.Close();
@@ -63,7 +65,7 @@ namespace Cadeteria.Repositorios
         {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"INSERT INTO Pedidos (Obs, Estado, CadeteID, ClienteID) VALUES ('{pedido.Obs}', '{pedido.Estado}');";
+            command.CommandText = $"INSERT INTO Pedidos (Obs, ClienteId, Estado, CadeteId) VALUES ('{pedido.Obs}', '{pedido.ClienteID}', '{pedido.Estado}', '{pedido.CadeteID}');";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
@@ -73,7 +75,7 @@ namespace Cadeteria.Repositorios
         {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"UPDATE Pedidos SET Obs = '{pedido.Obs}', Estado = '{pedido.Estado}',  ClienteID = '{pedido.ClienteID}', CadeteID = '{pedido.CadeteID}' WHERE Nro = '{pedido.Nro}';";
+            command.CommandText = $"UPDATE Pedidos SET Obs = '{pedido.Obs}', Estado = '{pedido.Estado}',  ClienteId = '{pedido.ClienteID}', CadeteId = '{pedido.CadeteID}' WHERE Nro = '{pedido.Nro}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
@@ -81,6 +83,12 @@ namespace Cadeteria.Repositorios
 
         public void Delete(int id)
         {
+            SqliteConnection connection = new SqliteConnection(cadenaConexion);
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"DELETE FROM Pedidos WHERE Nro = '{id}';";
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
 
         }
     }

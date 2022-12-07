@@ -8,16 +8,14 @@ namespace Cadeteria.ViewModels
 {
     public class PedidoViewModel
     {
-        private int idCadete;
+        private int cadeteID;
+        private int clienteID;
         private string estado;
         private int nro;
         private string nombreCliente;
         private string obs;
         private string direccionCliente;
-        private string nombreCadete;
 
-        [Required]
-        public int IdCadete { get => idCadete; set => idCadete = value; }
         [Required]
         public string Estado { get => estado; set => estado = value; }
         [Required]
@@ -27,6 +25,9 @@ namespace Cadeteria.ViewModels
         public string Obs { get => obs; set => obs = value; }
         [Required]
         public string DireccionCliente { get => direccionCliente; set => direccionCliente = value; }
-        public string NombreCadete { get => nombreCadete; set => nombreCadete = value; }
+        [Required]
+        public int CadeteID { get => cadeteID; set => cadeteID = value; }
+        [Required]
+        public int ClienteID { get => clienteID; set => clienteID = value; }
     }
 }

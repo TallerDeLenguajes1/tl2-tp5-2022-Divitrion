@@ -1,0 +1,20 @@
+@model Cadeteria.ViewModels.CadeteViewModel;
+@{
+    ViewData["Title"] = "EditarCadete";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    @using(Html.BeginForm("EditarCadete", "Cadetes", FormMethod.Post))
+    {
+        <h3>Nombre: </h3>
+        <input type="text" name="Nombre" value="@Model.Nombre"/>
+        <h3>Telefono: </h3>
+        <input type="phone" name="Telefono" value="@Model.Telefono" />
+        <h3>Direccion: </h3>
+        <input type="text" name="Direccion" value="@Model.Direccion" />
+        <input type="hidden" name="id" value=@Model.Id >
+        <input type="submit" value="Enviar" class="btn btn-primary">
+    }
+</div>

@@ -29,6 +29,7 @@ namespace Cadeteria.Repositorios
                         cadete.Id = Convert.ToInt32(reader["id"]);
                         cadete.Direccion = reader["Direccion"].ToString();
                         cadete.Nombre = reader["Nombre"].ToString();
+                        cadete.Telefono = reader["Telefono"].ToString();
                         cadetes.Add(cadete);
                     }
                 }
@@ -38,56 +39,90 @@ namespace Cadeteria.Repositorios
         }
 
         public Cadete GetById(int idCadete)
+        {
+            SqliteConnection connection = new SqliteConnection(cadenaConexion);
+            var cadete = new Cadete();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM Cadetes WHERE id = '{idCadete}';";
+            connection.Open();
+            using(SqliteDataReader reader = command.ExecuteReader())
             {
-                SqliteConnection connection = new SqliteConnection(cadenaConexion);
-                SqliteDataReader lector;
-                var cadete = new Cadete();
-                SqliteCommand command = connection.CreateCommand();
-                command.CommandText = $"SELECT * FROM Cadetes WHERE id = '{idCadete}';";
-                connection.Open();
-                using(SqliteDataReader reader = command.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        cadete.Id = Convert.ToInt32(reader["id"]);
-                        cadete.Direccion = reader["Direccion"].ToString();
-                        cadete.Nombre = reader["Nombre"].ToString();
-                    }
+                    cadete.Id = Convert.ToInt32(reader["id"]);
+                    cadete.Direccion = reader["Direccion"].ToString();
+                    cadete.Nombre = reader["Nombre"].ToString();
+                    cadete.Telefono = reader["Telefono"].ToString();
                 }
-                connection.Close();
-
-                return (cadete);
             }
+            connection.Close();
+
+            return (cadete);
+        }
+        
+        public List<Pedido> GetPedidos(int idCadete)
+        {
+            SqliteConnection connection = new SqliteConnection(cadenaConexion);
+            var pedidos = new List<Pedido>();
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"SELECT * FROM Pedidos WHERE CadeteId = '{idCadete}';";
+            connection.Open();
+            using(SqliteDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var pedido = new Pedido();
+                    pedido.Nro = Convert.ToInt32(reader["Nro"]);
+                    pedido.Obs = reader["Obs"].ToString();
+                    pedido.Estado = reader["Estado"].ToString();
+                    pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
+                    pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
+                    pedidos.Add(pedido);
+                }
+            }
+            connection.Close();
+
+            return pedidos;
+        }
 
         public void Create(Cadete cadete)
         {
+            var query = $"INSERT INTO Cadetes (Nombre, Direccion, Telefono) VALUES (@Nombre,@Direccion,@Telefono)";
+            using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
+            {
+
+                connection.Open();
+                var command = new SqliteCommand(query, connection);
+
+                command.Parameters.Add(new SqliteParameter("@Nombre", cadete.Nombre));
+                command.Parameters.Add(new SqliteParameter("@Direccion", cadete.Direccion));
+                command.Parameters.Add(new SqliteParameter("@Telefono", cadete.Telefono));
+
+                command.ExecuteNonQuery();
+
+                connection.Close();   
+            }
+        }
+
+        public void Update(Cadete cadete)
+        {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"INSERT INTO Cadetes (Nombre, Direccion, Telefono) VALUES ('{cadete.Nombre}', '{cadete.Direccion}', '{cadete.Telefono}');";
+            command.CommandText = $"UPDATE Cadetes SET Nombre = '{cadete.Nombre}', Direccion = '{cadete.Direccion}', Telefono = '{cadete.Telefono}' WHERE id = '{cadete.Id}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
         }
 
-            public void Update(Cadete cadete)
-            {
-                SqliteConnection connection = new SqliteConnection(cadenaConexion);
-                SqliteCommand command = connection.CreateCommand();
-                command.CommandText = $"UPDATE Cadetes SET Nombre = '{cadete.Nombre}', Direccion = '{cadete.Direccion}', Telefono = '{cadete.Telefono}' WHERE IdCadete = '{cadete.Id}';";
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
+        public void Delete(int id)
+        {
 
-            public void Delete(int id)
-            {
-
-                SqliteConnection connection = new SqliteConnection(cadenaConexion);
-                SqliteCommand command = connection.CreateCommand();
-                command.CommandText = $"DELETE FROM Cadetes WHERE id = '{id}';";
-                connection.Open();
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
+            SqliteConnection connection = new SqliteConnection(cadenaConexion);
+            SqliteCommand command = connection.CreateCommand();
+            command.CommandText = $"DELETE FROM Cadetes WHERE id = '{id}';";
+            connection.Open();
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
     }
 }
