@@ -1,11 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Bienvenido "+Context.Session.GetString("Nombre");
 }
 
 <div class="text-center">
-    <h1 class="display-4">Sistema de gestion de cadetes y pedidos</h1>
+    <h1 class="display-4">@ViewData["Title"]</h1>
     <section class="btn-group">
-        <a href="Cadetes/Listado" class="btn btn-primary btn-lg btn-block">Listado de Cadetes</a>
-        <a href="Pedidos/Listado" class="btn btn-primary btn-lg btn-block">Listado de Pedidos</a>
+        <a href="../Cadetes/Listado" class="btn btn-primary btn-lg btn-block">Listado de Cadetes</a>
+        <a href="../Pedidos/Listado" class="btn btn-primary btn-lg btn-block">Listado de Pedidos</a>
+        <a href="../Login/Login" class="btn btn-primary btn-lg btn-block">Login</a>
     </section>
 </div>

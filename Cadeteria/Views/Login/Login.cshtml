@@ -1,0 +1,21 @@
+@model Cadeteria.ViewModels.UsuarioViewmodel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="d-flex justify-content-center align-middle">
+    <form asp-action="Logeo" asp-controller="Login" method="post" class="d-grid gap-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <section class="form-group">
+            <label for="Usuario" class="form-label">Nombre de usuario</label>
+            <input type="text" name="Usuario" class="form-control">
+            <span asp-validation-for="Usuario" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <label for="Password" class="form-label">Contraseña</label>
+            <input type="password" name="Password" class="form-control">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </section>
+        <input type="submit" value="Enviar" class="btn btn-primary">
+    </form>
+</div>

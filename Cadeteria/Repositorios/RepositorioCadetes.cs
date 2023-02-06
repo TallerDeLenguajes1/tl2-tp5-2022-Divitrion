@@ -87,7 +87,7 @@ namespace Cadeteria.Repositorios
 
         public void Create(Cadete cadete)
         {
-            var query = $"INSERT INTO Cadetes (Nombre, Direccion, Telefono) VALUES (@Nombre,@Direccion,@Telefono)";
+            var query = $"INSERT INTO Cadetes (Nombre, Direccion, Telefono, idUsuario) VALUES (@Nombre,@Direccion,@Telefono,@idUsuario)";
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
 
@@ -97,6 +97,7 @@ namespace Cadeteria.Repositorios
                 command.Parameters.Add(new SqliteParameter("@Nombre", cadete.Nombre));
                 command.Parameters.Add(new SqliteParameter("@Direccion", cadete.Direccion));
                 command.Parameters.Add(new SqliteParameter("@Telefono", cadete.Telefono));
+                command.Parameters.Add(new SqliteParameter("@idUsuario", cadete.UserId));
 
                 command.ExecuteNonQuery();
 

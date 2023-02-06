@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Cadeteria.Models;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cadeteria.Controllers;
 
@@ -15,11 +17,19 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+                return RedirectToAction("Login","Login");
+            }
         return View();
     }
 
     public IActionResult Privacy()
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         return View();
     }
 

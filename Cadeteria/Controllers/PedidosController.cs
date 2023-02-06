@@ -4,6 +4,8 @@ using Cadeteria.Models;
 using AutoMapper;
 using Cadeteria.ViewModels;
 using Cadeteria.Repositorios;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cadeteria.Controllers;
 
@@ -24,10 +26,22 @@ public class PedidosController : Controller
         _repoClientes = repoClientes;
     }
 
-    public IActionResult Listado()
+    public IActionResult Listado(int? id)
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         var listadoPedidos = _repoPedidos.GetAll();
-        var listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidos);
+        var listadoPedidosVM = new List<PedidoViewModel>();
+        if (id != null)
+        {
+            var listadoPedidosFiltrada = listadoPedidos.Where(pedido => pedido.CadeteID == id);
+            listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidosFiltrada);
+        }else
+        {
+            listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidos);
+        }
         foreach (var pedidoVM in listadoPedidosVM)
         {
             var cliente = _repoClientes.GetById(pedidoVM.ClienteID);
@@ -39,12 +53,20 @@ public class PedidosController : Controller
 
     public IActionResult AltaPedido()
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         return View();
     }
 
     [HttpPost]
     public IActionResult CargaPedido(int CadeteId) 
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         var pedido = new Pedido();
         pedido.Obs = Request.Form["Observacion"];
         pedido.Estado = Request.Form["Estado"];
@@ -66,6 +88,10 @@ public class PedidosController : Controller
 
     public IActionResult EditarPedido(int id, int ClienteID)
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         var pedido = _repoPedidos.GetById(id);
         var cliente = _repoClientes.GetById(ClienteID);
         var pedidoVM = _mapper.Map<PedidoViewModel>(pedido);
@@ -77,6 +103,10 @@ public class PedidosController : Controller
     [HttpPost]
     public IActionResult EditarPedido(PedidoViewModel pedidoVM)
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         if (ModelState.IsValid)
         {
             var pedido = _mapper.Map<Pedido>(pedidoVM);
@@ -95,6 +125,10 @@ public class PedidosController : Controller
 
     public IActionResult BorrarPedido(int id)
     {
+        if (HttpContext.Session.GetInt32("Rol") == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
         var pedido = _repoPedidos.GetById(id);
         _repoClientes.Delete(pedido.ClienteID);
         return Redirect("Listado");
