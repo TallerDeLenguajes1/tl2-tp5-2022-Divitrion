@@ -6,6 +6,7 @@ using Cadeteria.ViewModels;
 using Cadeteria.Repositorios;
 using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cadeteria.Controllers;
 
@@ -57,7 +58,18 @@ public class PedidosController : Controller
             {
                return RedirectToAction("Login","Login");
             }
-        return View();
+        var listadoCadetes= _repoCadetes.GetAll();
+        var listadoVM = _mapper.Map<List<CadeteViewModel>>(listadoCadetes);
+        var itemsCadetes = listadoCadetes.ConvertAll(x =>
+        {
+            return new SelectListItem()
+            {
+                Text = x.Nombre.ToString(),
+                Value = x.Id.ToString()
+            };
+        });
+        ViewBag.listadoCadetes = itemsCadetes;
+        return View(listadoVM);
     }
 
     [HttpPost]
@@ -92,6 +104,16 @@ public class PedidosController : Controller
             {
                return RedirectToAction("Login","Login");
             }
+        var listadoCadetes= _repoCadetes.GetAll();
+        var itemsCadetes = listadoCadetes.ConvertAll(x =>
+        {
+            return new SelectListItem()
+            {
+                Text = x.Nombre.ToString(),
+                Value = x.Id.ToString()
+            };
+        });
+        ViewBag.listadoCadetes = itemsCadetes;
         var pedido = _repoPedidos.GetById(id);
         var cliente = _repoClientes.GetById(ClienteID);
         var pedidoVM = _mapper.Map<PedidoViewModel>(pedido);
@@ -119,7 +141,7 @@ public class PedidosController : Controller
             
         }else
         {
-            return View("EditarPedido");
+            return View("EditarPedido", pedidoVM);
         }
     }
 
@@ -130,7 +152,7 @@ public class PedidosController : Controller
                return RedirectToAction("Login","Login");
             }
         var pedido = _repoPedidos.GetById(id);
-        _repoClientes.Delete(pedido.ClienteID);
+        _repoPedidos.Delete(pedido.Nro);
         return Redirect("Listado");
     }
 

@@ -15,7 +15,7 @@ namespace Cadeteria.Repositorios
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
             var usuario = new Usuario();
-            command.CommandText = $"SELECT id, nombre, usuario, rol FROM Usuarios WHERE usuario = '{username}' AND password = '{password}'";
+            command.CommandText = $"SELECT id, nombre, usuario, rol FROM Usuarios WHERE usuario = '{username}' AND password = '{password}' AND Activo = {1}";
             connection.Open();
             using(SqliteDataReader reader = command.ExecuteReader())
             {
@@ -33,7 +33,7 @@ namespace Cadeteria.Repositorios
 
         public void CreateUser(string nombre, int rol, string usuario)
         {
-            var query = $"INSERT INTO Usuarios (nombre, usuario, password, rol) VALUES (@nombre,@usuario,@password,@rol)";
+            var query = $"INSERT INTO Usuarios (nombre, usuario, password, rol, Activo) VALUES (@nombre,@usuario,@password,@rol,@activo)";
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
 
@@ -44,6 +44,7 @@ namespace Cadeteria.Repositorios
                 command.Parameters.Add(new SqliteParameter("@rol", rol));
                 command.Parameters.Add(new SqliteParameter("@usuario", usuario));
                 command.Parameters.Add(new SqliteParameter("@password", usuario));
+                command.Parameters.Add(new SqliteParameter("@activo", 1));
 
                 command.ExecuteNonQuery();
 
@@ -56,7 +57,7 @@ namespace Cadeteria.Repositorios
 
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"DELETE FROM Usuarios WHERE id = '{id}';";
+            command.CommandText = $"UPDATE Usuarios SET Activo = {0} WHERE id = '{id}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();

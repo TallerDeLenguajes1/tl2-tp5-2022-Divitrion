@@ -12,7 +12,7 @@ namespace Cadeteria.Repositorios
         private string cadenaConexion = "Data Source=DB/PedidosDB.db;Cache=Shared";
         public List<Pedido> GetAll()
         {
-            var queryString = @"SELECT * FROM Pedidos;";
+            var queryString = $"SELECT * FROM Pedidos WHERE Activo = {1};";
             List<Pedido> pedidos = new List<Pedido>();
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
@@ -65,7 +65,7 @@ namespace Cadeteria.Repositorios
         {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"INSERT INTO Pedidos (Obs, ClienteId, Estado, CadeteId) VALUES ('{pedido.Obs}', '{pedido.ClienteID}', '{pedido.Estado}', '{pedido.CadeteID}');";
+            command.CommandText = $"INSERT INTO Pedidos (Obs, ClienteId, Estado, CadeteId, Activo) VALUES ('{pedido.Obs}', '{pedido.ClienteID}', '{pedido.Estado}', '{pedido.CadeteID}', '{1}');";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
@@ -85,7 +85,7 @@ namespace Cadeteria.Repositorios
         {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"DELETE FROM Pedidos WHERE Nro = '{id}';";
+            command.CommandText = $"UPDATE Pedidos SET Activo = {0} WHERE Nro = '{id}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();

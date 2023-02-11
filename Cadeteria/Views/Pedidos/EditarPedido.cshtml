@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "EditarPedido";
+    List<SelectListItem> listadoCadetes = (List<SelectListItem>)ViewBag.listadoCadetes;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -9,10 +10,29 @@
 <div>
     @using(Html.BeginForm("EditarPedido", "Pedidos", FormMethod.Post))
     {
-        <section class="form-group">
-            <label for="Estado">Estado Del Pedido: </label>
-            <input type="text" name="Estado" class="form-control" value="@Model.Estado">
-        </section>
+        <div class="form-group">
+            <label for="estado">Estado Del Pedido:</label>
+            <select class="form-control" id="estado" name="estado">
+                @switch (Model.Estado)
+                {
+                    case "Entregado":
+                        <option value="En Curso">En Curso</option>
+                        <option value="Entregado" selected>Entregado</option>
+                        <option value="???">???</option>
+                        break;
+                    case "???":
+                        <option value="En Curso">En Curso</option>
+                        <option value="Entregado">Entregado</option>
+                        <option value="???" selected>???</option>
+                        break;
+                    default:
+                        <option value="En Curso" selected>En Curso</option>
+                        <option value="Entregado">Entregado</option>
+                        <option value="???">???</option>
+                    break;
+                }
+            </select>
+        </div>
         <section class="form-group">
             <label for="NombreCliente">Nombre del cliente: </label>
             <input type="text" name="NombreCliente" class="form-control" value="@Model.NombreCliente">
@@ -25,10 +45,10 @@
             <label for="Obs">Observacion: </label>
             <input type="text" name="Obs" class="form-control" value="@Model.Obs">
         </section>
-        <section class="form-group">
-            <label for="CadeteId">Id del cadete: </label>
-            <input type="number" name="CadeteId" class="form-control" value="@Model.CadeteID">
-        </section>
+        <div class="form-group">
+            <label for="CadeteId">Seleccione un Cadete: </label>
+            @Html.DropDownList("CadeteId", listadoCadetes, "Cadete...", new { @class="form-select"})
+        </div>
             <input type="hidden" name="Nro" value=@Model.Nro >
             <input type="hidden" name="ClienteId" value=@Model.ClienteID >
             <button type="submit" class="btn btn-primary">Enviar</button>

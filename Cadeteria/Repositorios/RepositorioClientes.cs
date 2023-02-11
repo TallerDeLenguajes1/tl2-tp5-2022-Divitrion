@@ -10,7 +10,7 @@ namespace Cadeteria.Repositorios
 
         public List<Cliente> GetAll()
         {
-            var queryString = @"SELECT * FROM Clientes;";
+            var queryString = $"SELECT * FROM Clientes WHERE Activo = {1};";
             List<Cliente> clientes = new List<Cliente>();
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
@@ -60,7 +60,7 @@ namespace Cadeteria.Repositorios
         {
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"INSERT INTO Clientes (Nombre, Direccion, Telefono) VALUES ('{cliente.Nombre}', '{cliente.Direccion}', '{cliente.Telefono}');";
+            command.CommandText = $"INSERT INTO Clientes (Nombre, Direccion, Telefono, Activo) VALUES ('{cliente.Nombre}', '{cliente.Direccion}', '{cliente.Telefono}', '{1}');";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
@@ -81,7 +81,7 @@ namespace Cadeteria.Repositorios
 
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"DELETE FROM Clientes WHERE id = '{id}';";
+            command.CommandText = $"UPDATE Clientes SET Activo = {0} WHERE id = '{id}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();

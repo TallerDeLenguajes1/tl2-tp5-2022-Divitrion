@@ -14,7 +14,7 @@ namespace Cadeteria.Repositorios
 
         public List<Cadete> GetAll()
         {
-            var queryString = @"SELECT * FROM Cadetes;";
+            var queryString = $"SELECT * FROM Cadetes WHERE Activo = {1};";
             List<Cadete> cadetes = new List<Cadete>();
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
@@ -65,7 +65,7 @@ namespace Cadeteria.Repositorios
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             var pedidos = new List<Pedido>();
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM Pedidos WHERE CadeteId = '{idCadete}';";
+            command.CommandText = $"SELECT * FROM Pedidos WHERE CadeteId = '{idCadete}' AND Activo = {1};";
             connection.Open();
             using(SqliteDataReader reader = command.ExecuteReader())
             {
@@ -87,7 +87,7 @@ namespace Cadeteria.Repositorios
 
         public void Create(Cadete cadete)
         {
-            var query = $"INSERT INTO Cadetes (Nombre, Direccion, Telefono, idUsuario) VALUES (@Nombre,@Direccion,@Telefono,@idUsuario)";
+            var query = $"INSERT INTO Cadetes (Nombre, Direccion, Telefono, idUsuario, Activo) VALUES (@Nombre,@Direccion,@Telefono,@idUsuario,@Activo)";
             using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
             {
 
@@ -98,6 +98,7 @@ namespace Cadeteria.Repositorios
                 command.Parameters.Add(new SqliteParameter("@Direccion", cadete.Direccion));
                 command.Parameters.Add(new SqliteParameter("@Telefono", cadete.Telefono));
                 command.Parameters.Add(new SqliteParameter("@idUsuario", cadete.UserId));
+                command.Parameters.Add(new SqliteParameter("@Activo", 1));
 
                 command.ExecuteNonQuery();
 
@@ -120,7 +121,7 @@ namespace Cadeteria.Repositorios
 
             SqliteConnection connection = new SqliteConnection(cadenaConexion);
             SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"DELETE FROM Cadetes WHERE id = '{id}';";
+            command.CommandText = $"UPDATE Cadetes SET Activo = {0} WHERE id = '{id}';";
             connection.Open();
             command.ExecuteNonQuery();
             connection.Close();
