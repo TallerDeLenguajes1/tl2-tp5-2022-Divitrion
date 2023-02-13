@@ -20,7 +20,25 @@
                 <td>@cliente.Nombre</td>
                 <td>@cliente.Telefono</td>
                 <td>@cliente.Direccion</td>
+                <td>
+                    <div class="btn-group">
+                    @using(Html.BeginForm("EditarCliente", "Clientes", FormMethod.Get))
+                    {
+                        <input type="hidden" name="idCliente" value=@cliente.Id >
+                        <input type="submit" value="Editar" class="btn btn-warning">
+                    }
+                    @using(Html.BeginForm("BorrarCliente", "Clientes", FormMethod.Get))
+                    {
+                        <input type="hidden" name="id" value=@cliente.Id >
+                        <input type="submit" value="Borrar" class="btn btn-danger">
+                    }
+                    </div>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+<section class="btn-group">
+        <a href="AltaCliente" class="btn btn-primary btn-sm">Agregar Nuevo</a>
+</section>

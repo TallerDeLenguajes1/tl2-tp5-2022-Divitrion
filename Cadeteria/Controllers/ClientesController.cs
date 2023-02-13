@@ -32,6 +32,69 @@ namespace Cadeteria.Controllers
             return View(listadoVM);
         }
 
+        [HttpGet]
+        public IActionResult EditarCliente(int idCliente)
+        {
+            if (HttpContext.Session.GetInt32("Rol") == null || HttpContext.Session.GetInt32("Rol") == 2)
+            {
+               return RedirectToAction("Login","Login");
+            }
+            var clienteEditable = _repoClientes.GetById(idCliente);
+            var clienteEditableVM = _mapper.Map<ClienteViewmodel>(clienteEditable);
+            return View(clienteEditableVM);
+        }
+
+        [HttpPost]
+
+        public IActionResult EditarCliente(ClienteViewmodel clienteVM)
+        {
+            if (HttpContext.Session.GetInt32("Rol") == null || HttpContext.Session.GetInt32("Rol") == 2)
+            {
+                return RedirectToAction("Login","Login");
+            }
+            var cliente = _mapper.Map<Cliente>(clienteVM);
+            _repoClientes.Update(cliente);
+            return Redirect("Listado");
+        }
+
+        public IActionResult AltaCliente()
+        {
+            if (HttpContext.Session.GetInt32("Rol") == null || HttpContext.Session.GetInt32("Rol") == 2)
+            {
+               return RedirectToAction("Login","Login");
+            }
+            return View(new ClienteViewmodel());
+        }
+
+        [HttpPost]
+        public IActionResult AltaCliente(ClienteViewmodel clienteVM)
+        {
+            if (HttpContext.Session.GetInt32("Rol") == null || HttpContext.Session.GetInt32("Rol") == 2)
+            {
+               return RedirectToAction("Login","Login");
+            }
+            if (ModelState.IsValid)
+            {
+                var cliente = _mapper.Map<Cliente>(clienteVM);
+                _repoClientes.Create(cliente);
+                return RedirectToAction("Listado");
+            }else
+            {
+                return View("AltaCliente", clienteVM);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult BorrarCadete(int id)
+        {
+            if (HttpContext.Session.GetInt32("Rol") == null || HttpContext.Session.GetInt32("Rol") == 2)
+            {
+               return RedirectToAction("Login","Login");
+            }
+            _repoClientes.Delete(id);
+            return Redirect("Listado");
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

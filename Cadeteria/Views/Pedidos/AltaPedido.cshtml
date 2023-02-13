@@ -1,42 +1,41 @@
-@model List<Cadeteria.ViewModels.CadeteViewModel>
+@model Cadeteria.ViewModels.PedidoViewModel
 @{
     ViewData["Title"] = "Agregar un Pedido";
     List<SelectListItem> listadoCadetes = (List<SelectListItem>)ViewBag.listadoCadetes;
+    List<SelectListItem> listadoClientes = (List<SelectListItem>)ViewBag.listadoClientes;
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    @using(Html.BeginForm("CargaPedido", "Pedidos", FormMethod.Post))
-    {
+    <form asp-action="AltaPedido" asp-controller="Pedidos" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <section class="form-group">
-            <label for="Nombre">Nombre del cliente: </label>
-            <input type="text" name="Nombre" class="form-control">
+            <label asp-for="ClienteID" class="control-label">Seleccione un Cliente: </label>
+            @Html.DropDownList("ClienteID",listadoClientes, "Cliente...", new { @class="form-select"})
+            @* <select id="ClienteID" name="ClienteID" asp-items="listadoClientes" class="form-control"></select> *@
+            <span asp-validation-for="ClienteID" class="text-danger"></span>
         </section>
         <section class="form-group">
-            <label for="Telefono">Telefono del cliente: </label>
-            <input type="phone" name="Telefono" class="form-control">
+            <label asp-for="Obs" class="control-label">Observacion: </label>
+            <input type="text" name="Obs" class="form-control">
+            <span asp-validation-for="Obs" class="text-danger"></span>
         </section>
         <section class="form-group">
-            <label for="Direccion">Direccion del cliente: </label>
-            <input type="text" name="Direccion" class="form-control">
-        </section>
-        <section class="form-group">
-            <label for="Observacion">Observacion: </label>
-            <input type="text" name="Observacion" class="form-control">
-        </section>
-        <div class="form-group">
-            <label for="estado">Estado del Pedido: </label>
-            <select class="form-control" id="estado" name="estado">
+            <label asp-for="Estado" class="control-label">Estado del Pedido: </label>
+            <select class="form-control" id="Estado" name="Estado">
                 <option value="En Curso">En Curso</option>
                 <option value="Entregado">Entregado</option>
-                <option value="???">???</option>
+                <option value="Pendiente">Pendiente</option>
             </select>
-        </div>
-        <div class="form-group">
-            <label for="CadeteId">Seleccione un Cadete: </label>
-            @Html.DropDownList("CadeteId", listadoCadetes, "Cadete...", new { @class="form-select"})
-        </div>
-            <button type="submit" class="btn btn-primary">Enviar</button>
-    }
+            <span asp-validation-for="Estado" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <label asp-for="CadeteID" class="control-label">Seleccione un Cadete: </label>
+            @Html.DropDownList("CadeteID",listadoCadetes, "Cadete...", new { @class="form-select"})
+            @* <select id="CadeteID" name="ClienteID" asp-items="listadoCadetes" class="form-control"></select> *@
+            <span asp-validation-for="CadeteID" class="text-danger"></span>
+        </section>
+            <input type="submit" value="Enviar" class="btn btn-primary">
+    </form>
 </div>

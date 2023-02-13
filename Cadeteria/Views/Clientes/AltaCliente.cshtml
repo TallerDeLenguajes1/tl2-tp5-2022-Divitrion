@@ -1,26 +1,26 @@
-@model Cadeteria.ViewModels.CadeteViewModel
+@model Cadeteria.ViewModels.ClienteViewmodel
 @{
-    ViewData["Title"] = "AltaCadete";
+    ViewData["Title"] = "Alta de Clientes";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    <form asp-action="AltaCadete" asp-controller="Cadetes" method="post">
+    <form asp-action="AltaCliente" asp-controller="Clientes" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <section class="form-group">
             <label for="Nombre">Nombre</label>
-            <input type="text" name="Nombre" class="form-control">
+            <input type="text" name="Nombre">
             <span asp-validation-for="Nombre" class="text-danger"></span>
         </section>
         <section class="form-group">
             <label for="Telefono">Telefono</label>
-            <input type="phone" name="Telefono" class="form-control">
+            <input type="phone" name="Telefono">
             <span asp-validation-for="Telefono" class="text-danger"></span>
         </section>
         <section class="form-group">
             <label for="Direccion">Direccion</label>
-            <input type="text" name="Direccion" class="form-control">
+            <input type="text" name="Direccion">
             <span asp-validation-for="Direccion" class="text-danger"></span>
         </section>
         <input type="submit" value="Enviar" class="btn btn-primary">

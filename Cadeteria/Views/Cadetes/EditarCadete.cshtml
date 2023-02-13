@@ -6,15 +6,23 @@
 <h1>@ViewData["Title"]</h1>
 
 <div>
-    @using(Html.BeginForm("EditarCadete", "Cadetes", FormMethod.Post))
-    {
-        <h3>Nombre: </h3>
-        <input type="text" name="Nombre" value="@Model.Nombre"/>
-        <h3>Telefono: </h3>
-        <input type="phone" name="Telefono" value="@Model.Telefono" />
-        <h3>Direccion: </h3>
-        <input type="text" name="Direccion" value="@Model.Direccion" />
-        <input type="hidden" name="id" value=@Model.Id >
+    <form asp-action="EditarCadete" asp-controller="Cadetes" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <section class="form-group">
+            <label for="Nombre">Nombre</label>
+            <input type="text" name="Nombre" class="form-control" value="@Model.Nombre">
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <label for="Telefono">Telefono</label>
+            <input type="phone" name="Telefono" class="form-control" value="@Model.Telefono">
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <label for="Direccion">Direccion</label>
+            <input type="text" name="Direccion" class="form-control" value="@Model.Direccion">
+            <span asp-validation-for="Direccion" class="text-danger"></span>
+        </section>
         <input type="submit" value="Enviar" class="btn btn-primary">
-    }
+    </form>
 </div>

@@ -59,9 +59,15 @@ namespace Cadeteria.Controllers
             {
                 return RedirectToAction("Login","Login");
             }
-            var cadete = _mapper.Map<Cadete>(cadeteVM);
-            _repoCadetes.Update(cadete);
-            return Redirect("Listado");
+            if (ModelState.IsValid)
+            {
+                var cadete = _mapper.Map<Cadete>(cadeteVM);
+                _repoCadetes.Update(cadete);
+                return RedirectToAction("Listado");
+            }else
+            {
+                return View("EditarCadete", cadeteVM);
+            }
         }
 
         public IActionResult AltaCadete()

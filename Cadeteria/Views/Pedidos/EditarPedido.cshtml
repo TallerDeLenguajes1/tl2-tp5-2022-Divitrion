@@ -11,43 +11,42 @@
     @using(Html.BeginForm("EditarPedido", "Pedidos", FormMethod.Post))
     {
         <div class="form-group">
-            <label for="estado">Estado Del Pedido:</label>
+            <label asp-for="Estado" class="control-label">Estado del Pedido: </label>
             <select class="form-control" id="estado" name="estado">
                 @switch (Model.Estado)
                 {
                     case "Entregado":
                         <option value="En Curso">En Curso</option>
                         <option value="Entregado" selected>Entregado</option>
-                        <option value="???">???</option>
+                        <option value="Pendiente">Pendiente</option>
                         break;
-                    case "???":
-                        <option value="En Curso">En Curso</option>
-                        <option value="Entregado">Entregado</option>
-                        <option value="???" selected>???</option>
-                        break;
-                    default:
+                    case "En Curso":
                         <option value="En Curso" selected>En Curso</option>
                         <option value="Entregado">Entregado</option>
-                        <option value="???">???</option>
+                        <option value="Pendiente">Pendiente</option>
+                        break;
+                    default:
+                        <option value="En Curso">En Curso</option>
+                        <option value="Entregado">Entregado</option>
+                        <option value="Pendiente" selected>Pendiente</option>
                     break;
                 }
             </select>
+            <span asp-validation-for="Estado" class="text-danger"></span>
         </div>
-        <section class="form-group">
-            <label for="NombreCliente">Nombre del cliente: </label>
-            <input type="text" name="NombreCliente" class="form-control" value="@Model.NombreCliente">
-        </section>
-        <section class="form-group">
-            <label for="DireccionCliente">Direccion del cliente: </label>
-            <input type="text" name="DireccionCliente" class="form-control" value="@Model.DireccionCliente">
-        </section>
         <section class="form-group">
             <label for="Obs">Observacion: </label>
             <input type="text" name="Obs" class="form-control" value="@Model.Obs">
+            <span asp-validation-for="Obs" class="text-danger"></span>
+        </section>
+        <section class="form-group">
+            <input type="hidden" name="NombreCliente" class="form-control" value="@Model.NombreCliente">
+            <input type="hidden" name="DireccionCliente" class="form-control" value="@Model.DireccionCliente">
         </section>
         <div class="form-group">
-            <label for="CadeteId">Seleccione un Cadete: </label>
-            @Html.DropDownList("CadeteId", listadoCadetes, "Cadete...", new { @class="form-select"})
+            <label for="CadeteID">Seleccione un Cadete:</label>
+            @Html.DropDownList("CadeteID", listadoCadetes, "Cadete...", new { @class="form-select"})
+            <span asp-validation-for="CadeteID" class="text-danger"></span>
         </div>
             <input type="hidden" name="Nro" value=@Model.Nro >
             <input type="hidden" name="ClienteId" value=@Model.ClienteID >

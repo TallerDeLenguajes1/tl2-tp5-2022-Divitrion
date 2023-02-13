@@ -52,6 +52,7 @@ public class PedidosController : Controller
         return View(listadoPedidosVM);
     }
 
+    [HttpGet]
     public IActionResult AltaPedido()
     {
         if (HttpContext.Session.GetInt32("Rol") == null)
@@ -59,64 +60,92 @@ public class PedidosController : Controller
                return RedirectToAction("Login","Login");
             }
         var listadoCadetes= _repoCadetes.GetAll();
-        var listadoVM = _mapper.Map<List<CadeteViewModel>>(listadoCadetes);
-        var itemsCadetes = listadoCadetes.ConvertAll(x =>
+        var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
         {
             return new SelectListItem()
             {
-                Text = x.Nombre.ToString(),
-                Value = x.Id.ToString()
+                Text = Cadete.Nombre.ToString(),
+                Value = Cadete.Id.ToString()
             };
         });
         ViewBag.listadoCadetes = itemsCadetes;
-        return View(listadoVM);
+        
+        var listadoClientes = _repoClientes.GetAll();
+        var itemsClientes = listadoClientes.ConvertAll(cliente =>
+        {
+            return new SelectListItem()
+            {
+                Text = cliente.Nombre.ToString(),
+                Value = cliente.Id.ToString()
+            };
+        });
+        ViewBag.listadoClientes = itemsClientes;
+        return View(new PedidoViewModel());
     }
 
     [HttpPost]
-    public IActionResult CargaPedido(int CadeteId) 
+    public IActionResult AltaPedido(PedidoViewModel PedidoVM) 
     {
         if (HttpContext.Session.GetInt32("Rol") == null)
             {
                return RedirectToAction("Login","Login");
             }
-        var pedido = new Pedido();
-        pedido.Obs = Request.Form["Observacion"];
-        pedido.Estado = Request.Form["Estado"];
-        pedido.CadeteID = CadeteId;
-        var cliente = new Cliente();
-        cliente.Nombre = Request.Form["Nombre"];
-        cliente.Telefono = Request.Form["Telefono"];
-        cliente.Direccion = Request.Form["Direccion"];
-        _repoClientes.Create(cliente);
-        pedido.Cliente = cliente;
-        var listaClientes = _repoClientes.GetAll();
-        pedido.ClienteID = listaClientes.Last().Id;
-        _repoPedidos.Create(pedido);
+        
+        if (ModelState.IsValid)
+        {
+            var pedido = _mapper.Map<Pedido>(PedidoVM);
+            _repoPedidos.Create(pedido);
+            return RedirectToAction("Listado");
+        }else
+        {
+            // var listadoCadetes= _repoCadetes.GetAll();
+            // var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
+            // {
+            //     return new SelectListItem()
+            //     {
+            //         Text = Cadete.Nombre.ToString(),
+            //         Value = Cadete.Id.ToString()
+            //     };
+            // });
+            // ViewBag.listadoCadetes = itemsCadetes;
+            
+            // var listadoClientes = _repoClientes.GetAll();
+            // var itemsClientes = listadoClientes.ConvertAll(cliente =>
+            // {
+            //     return new SelectListItem()
+            //     {
+            //         Text = cliente.Nombre.ToString(),
+            //         Value = cliente.Id.ToString()
+            //     };
+            // });
+            // ViewBag.listadoClientes = itemsClientes;
+            return View("AltaPedido", PedidoVM);
+        }
 
-        return Redirect("Listado");
     }
 
     [HttpGet]
-
     public IActionResult EditarPedido(int id, int ClienteID)
     {
         if (HttpContext.Session.GetInt32("Rol") == null)
             {
                return RedirectToAction("Login","Login");
             }
-        var listadoCadetes= _repoCadetes.GetAll();
-        var itemsCadetes = listadoCadetes.ConvertAll(x =>
-        {
-            return new SelectListItem()
-            {
-                Text = x.Nombre.ToString(),
-                Value = x.Id.ToString()
-            };
-        });
-        ViewBag.listadoCadetes = itemsCadetes;
         var pedido = _repoPedidos.GetById(id);
         var cliente = _repoClientes.GetById(ClienteID);
         var pedidoVM = _mapper.Map<PedidoViewModel>(pedido);
+        var listadoCadetes= _repoCadetes.GetAll();
+
+        var itemsCadetes = listadoCadetes.ConvertAll(cadete =>
+        {
+            return new SelectListItem()
+            {
+                Text = cadete.Nombre.ToString(),
+                Value = cadete.Id.ToString(),
+                Selected = cadete.Id == pedido.CadeteID
+            };
+        });
+        ViewBag.listadoCadetes = itemsCadetes;
         pedidoVM.NombreCliente = cliente.Nombre;
         pedidoVM.DireccionCliente = cliente.Direccion;
         return View(pedidoVM);
@@ -137,10 +166,20 @@ public class PedidosController : Controller
             cliente.Direccion = pedidoVM.DireccionCliente;
             _repoPedidos.Update(pedido);
             _repoClientes.Update(cliente);
-            return Redirect("Listado");
+            return RedirectToAction("Listado");
             
         }else
         {
+            // var listadoCadetes= _repoCadetes.GetAll();
+            // var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
+            // {
+            //     return new SelectListItem()
+            //     {
+            //         Text = Cadete.Nombre.ToString(),
+            //         Value = Cadete.Id.ToString()
+            //     };
+            // });
+            // ViewBag.listadoCadetes = itemsCadetes;
             return View("EditarPedido", pedidoVM);
         }
     }

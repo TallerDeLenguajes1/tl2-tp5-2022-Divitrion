@@ -11,9 +11,9 @@ namespace Cadeteria.ViewModels
         private string usuario;
         private string password;
 
-        [Required]
+        [Required(ErrorMessage = "Ingrese un Usuario")]
         public string Usuario { get => usuario; set => usuario = value; }
-        [Required]
+        [Required(ErrorMessage = "Ingrese una Contraseña")]
         public string Password { get => password; set => password = value; }
     }
 }
