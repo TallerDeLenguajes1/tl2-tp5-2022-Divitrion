@@ -14,6 +14,7 @@ namespace Cadeteria.ViewModels
         private string estado;
         private int nro;
         private string nombreCliente;
+        private string nombreCadete;
         private string obs;
         private string direccionCliente;
 
@@ -31,5 +32,7 @@ namespace Cadeteria.ViewModels
         public string DireccionCliente { get => direccionCliente; set => direccionCliente = value; }
         [ValidateNever]
         public int Nro { get => nro; set => nro = value; }
+        [ValidateNever]
+        public string NombreCadete { get => nombreCadete; set => nombreCadete = value; }
     }
 }

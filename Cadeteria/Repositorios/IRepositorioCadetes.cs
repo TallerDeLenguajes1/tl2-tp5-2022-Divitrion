@@ -11,6 +11,7 @@ namespace Cadeteria.Repositorios
         public List<Cadete> GetAll();
         public Cadete GetById(int idCadete);
         public List<Pedido> GetPedidos(int idCadete);
+        public Cadete GetUser(int idUsuario);
         public void Create(Cadete cadete);
         public void Update(Cadete cadete);
         public void Delete(int id);

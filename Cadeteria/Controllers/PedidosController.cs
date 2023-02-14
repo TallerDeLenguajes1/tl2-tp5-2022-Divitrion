@@ -27,172 +27,254 @@ public class PedidosController : Controller
         _repoClientes = repoClientes;
     }
 
-    public IActionResult Listado(int? id)
+    public IActionResult Listado(int? idCadete, int? idCliente)
     {
-        if (HttpContext.Session.GetInt32("Rol") == null)
+        var rol = HttpContext.Session.GetInt32("Rol");
+            if (rol == null)
             {
                return RedirectToAction("Login","Login");
             }
-        var listadoPedidos = _repoPedidos.GetAll();
-        var listadoPedidosVM = new List<PedidoViewModel>();
-        if (id != null)
+        try
         {
-            var listadoPedidosFiltrada = listadoPedidos.Where(pedido => pedido.CadeteID == id);
-            listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidosFiltrada);
-        }else
-        {
-            listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidos);
+            var listadoPedidos = _repoPedidos.GetAll();
+            var listadoPedidosVM = new List<PedidoViewModel>();
+            if (HttpContext.Session.GetInt32("CadeteID") != null)
+            {
+                var listadoPedidosFiltrada = listadoPedidos.Where(pedido => pedido.CadeteID == HttpContext.Session.GetInt32("CadeteID"));
+                listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidosFiltrada);
+            }else if (idCliente != null)
+            {
+                var listadoPedidosFiltrada = listadoPedidos.Where(pedido => pedido.ClienteID == idCliente);
+                listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidosFiltrada);
+            }else if (idCadete != null)
+            {
+                var listadoPedidosFiltrada = listadoPedidos.Where(pedido => pedido.CadeteID == idCadete);
+                listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidosFiltrada);
+            }else
+            {
+                listadoPedidosVM = _mapper.Map<List<PedidoViewModel>>(listadoPedidos);
+            }
+            foreach (var pedidoVM in listadoPedidosVM)
+            {
+                var cliente = _repoClientes.GetById(pedidoVM.ClienteID);
+                pedidoVM.NombreCliente = cliente.Nombre;
+                pedidoVM.DireccionCliente = cliente.Direccion;
+                var cadete = _repoCadetes.GetById(pedidoVM.CadeteID);
+                pedidoVM.NombreCadete = cadete.Nombre;
+            }
+            return View(listadoPedidosVM);
         }
-        foreach (var pedidoVM in listadoPedidosVM)
+        catch (System.Exception)
         {
-            var cliente = _repoClientes.GetById(pedidoVM.ClienteID);
-            pedidoVM.NombreCliente = cliente.Nombre;
-            pedidoVM.DireccionCliente = cliente.Direccion;
+            _logger.LogError("Error de la base de datos en la lista de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
         }
-        return View(listadoPedidosVM);
     }
 
     [HttpGet]
     public IActionResult AltaPedido()
     {
-        if (HttpContext.Session.GetInt32("Rol") == null)
+        var rol = HttpContext.Session.GetInt32("Rol");
+            if (rol == null)
             {
                return RedirectToAction("Login","Login");
             }
-        var listadoCadetes= _repoCadetes.GetAll();
-        var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
+        try
         {
-            return new SelectListItem()
+            var listadoCadetes= _repoCadetes.GetAll();
+            var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
             {
-                Text = Cadete.Nombre.ToString(),
-                Value = Cadete.Id.ToString()
-            };
-        });
-        ViewBag.listadoCadetes = itemsCadetes;
-        
-        var listadoClientes = _repoClientes.GetAll();
-        var itemsClientes = listadoClientes.ConvertAll(cliente =>
+                return new SelectListItem()
+                {
+                    Text = Cadete.Nombre.ToString(),
+                    Value = Cadete.Id.ToString()
+                };
+            });
+            ViewBag.listadoCadetes = itemsCadetes;
+            
+            var listadoClientes = _repoClientes.GetAll();
+            var itemsClientes = listadoClientes.ConvertAll(cliente =>
+            {
+                return new SelectListItem()
+                {
+                    Text = cliente.Nombre.ToString(),
+                    Value = cliente.Id.ToString()
+                };
+            });
+            ViewBag.listadoClientes = itemsClientes;
+            return View(new PedidoViewModel());
+        }
+        catch (System.Exception)
         {
-            return new SelectListItem()
-            {
-                Text = cliente.Nombre.ToString(),
-                Value = cliente.Id.ToString()
-            };
-        });
-        ViewBag.listadoClientes = itemsClientes;
-        return View(new PedidoViewModel());
+            _logger.LogError("Error de la base de datos en el Alta de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
+        }
     }
 
     [HttpPost]
     public IActionResult AltaPedido(PedidoViewModel PedidoVM) 
     {
-        if (HttpContext.Session.GetInt32("Rol") == null)
+        var rol = HttpContext.Session.GetInt32("Rol");
+            if (rol == null)
             {
                return RedirectToAction("Login","Login");
             }
-        
-        if (ModelState.IsValid)
+        try
         {
-            var pedido = _mapper.Map<Pedido>(PedidoVM);
-            _repoPedidos.Create(pedido);
-            return RedirectToAction("Listado");
-        }else
-        {
-            // var listadoCadetes= _repoCadetes.GetAll();
-            // var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
-            // {
-            //     return new SelectListItem()
-            //     {
-            //         Text = Cadete.Nombre.ToString(),
-            //         Value = Cadete.Id.ToString()
-            //     };
-            // });
-            // ViewBag.listadoCadetes = itemsCadetes;
-            
-            // var listadoClientes = _repoClientes.GetAll();
-            // var itemsClientes = listadoClientes.ConvertAll(cliente =>
-            // {
-            //     return new SelectListItem()
-            //     {
-            //         Text = cliente.Nombre.ToString(),
-            //         Value = cliente.Id.ToString()
-            //     };
-            // });
-            // ViewBag.listadoClientes = itemsClientes;
-            return View("AltaPedido", PedidoVM);
+            if (ModelState.IsValid)
+            {
+                var pedido = _mapper.Map<Pedido>(PedidoVM);
+                _repoPedidos.Create(pedido);
+                return RedirectToAction("Listado");
+            }else
+            {
+                var listadoCadetes= _repoCadetes.GetAll();
+                var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
+                {
+                    return new SelectListItem()
+                    {
+                        Text = Cadete.Nombre.ToString(),
+                        Value = Cadete.Id.ToString()
+                    };
+                });
+                ViewBag.listadoCadetes = itemsCadetes;
+                
+                var listadoClientes = _repoClientes.GetAll();
+                var itemsClientes = listadoClientes.ConvertAll(cliente =>
+                {
+                    return new SelectListItem()
+                    {
+                        Text = cliente.Nombre.ToString(),
+                        Value = cliente.Id.ToString()
+                    };
+                });
+                ViewBag.listadoClientes = itemsClientes;
+                return View("AltaPedido", PedidoVM);
+            }
         }
-
+        catch (System.Exception)
+        {
+            _logger.LogError("Error de la base de datos en el Alta de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
+        }
     }
 
     [HttpGet]
     public IActionResult EditarPedido(int id, int ClienteID)
     {
-        if (HttpContext.Session.GetInt32("Rol") == null)
+        var rol = HttpContext.Session.GetInt32("Rol");
+            if (rol == null)
             {
                return RedirectToAction("Login","Login");
             }
-        var pedido = _repoPedidos.GetById(id);
-        var cliente = _repoClientes.GetById(ClienteID);
-        var pedidoVM = _mapper.Map<PedidoViewModel>(pedido);
-        var listadoCadetes= _repoCadetes.GetAll();
-
-        var itemsCadetes = listadoCadetes.ConvertAll(cadete =>
+        try
         {
-            return new SelectListItem()
+            var pedido = _repoPedidos.GetById(id);
+            var cliente = _repoClientes.GetById(ClienteID);
+            var pedidoVM = _mapper.Map<PedidoViewModel>(pedido);
+            var listadoCadetes= _repoCadetes.GetAll();
+
+            var itemsCadetes = listadoCadetes.ConvertAll(cadete =>
             {
-                Text = cadete.Nombre.ToString(),
-                Value = cadete.Id.ToString(),
-                Selected = cadete.Id == pedido.CadeteID
-            };
-        });
-        ViewBag.listadoCadetes = itemsCadetes;
-        pedidoVM.NombreCliente = cliente.Nombre;
-        pedidoVM.DireccionCliente = cliente.Direccion;
-        return View(pedidoVM);
+                return new SelectListItem()
+                {
+                    Text = cadete.Nombre.ToString(),
+                    Value = cadete.Id.ToString(),
+                    Selected = cadete.Id == pedido.CadeteID
+                };
+            });
+            ViewBag.listadoCadetes = itemsCadetes;
+            pedidoVM.NombreCliente = cliente.Nombre;
+            pedidoVM.DireccionCliente = cliente.Direccion;
+            return View(pedidoVM);
+        }
+        catch (System.Exception)
+        {
+            _logger.LogError("Error de la base de datos en la Edicion de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
+        }
     }
 
     [HttpPost]
     public IActionResult EditarPedido(PedidoViewModel pedidoVM)
     {
-        if (HttpContext.Session.GetInt32("Rol") == null)
+        try
+        {
+            if (ModelState.IsValid)
             {
-               return RedirectToAction("Login","Login");
+                var pedido = _mapper.Map<Pedido>(pedidoVM);
+                var cliente = _repoClientes.GetById(pedidoVM.ClienteID);
+                cliente.Nombre = pedidoVM.NombreCliente;
+                cliente.Direccion = pedidoVM.DireccionCliente;
+                _repoPedidos.Update(pedido);
+                _repoClientes.Update(cliente);
+                return RedirectToAction("Listado");
+                
+            }else
+            {
+                var listadoCadetes= _repoCadetes.GetAll();
+                var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
+                {
+                    return new SelectListItem()
+                    {
+                        Text = Cadete.Nombre.ToString(),
+                        Value = Cadete.Id.ToString()
+                    };
+                });
+                ViewBag.listadoCadetes = itemsCadetes;
+                return View("EditarPedido", pedidoVM);
             }
-        if (ModelState.IsValid)
+        }
+        catch (System.Exception)
         {
-            var pedido = _mapper.Map<Pedido>(pedidoVM);
-            var cliente = _repoClientes.GetById(pedidoVM.ClienteID);
-            cliente.Nombre = pedidoVM.NombreCliente;
-            cliente.Direccion = pedidoVM.DireccionCliente;
-            _repoPedidos.Update(pedido);
-            _repoClientes.Update(cliente);
-            return RedirectToAction("Listado");
-            
-        }else
-        {
-            // var listadoCadetes= _repoCadetes.GetAll();
-            // var itemsCadetes = listadoCadetes.ConvertAll(Cadete =>
-            // {
-            //     return new SelectListItem()
-            //     {
-            //         Text = Cadete.Nombre.ToString(),
-            //         Value = Cadete.Id.ToString()
-            //     };
-            // });
-            // ViewBag.listadoCadetes = itemsCadetes;
-            return View("EditarPedido", pedidoVM);
+           _logger.LogError("Error de la base de datos en la Edicion de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
         }
     }
 
     public IActionResult BorrarPedido(int id)
     {
-        if (HttpContext.Session.GetInt32("Rol") == null)
+        var rol = HttpContext.Session.GetInt32("Rol");
+            if (rol == null)
             {
                return RedirectToAction("Login","Login");
             }
-        var pedido = _repoPedidos.GetById(id);
-        _repoPedidos.Delete(pedido.Nro);
-        return Redirect("Listado");
+        try
+        {
+            var pedido = _repoPedidos.GetById(id);
+            _repoPedidos.Delete(pedido.Nro);
+            return Redirect("Listado");
+        }
+        catch (System.Exception)
+        {
+            _logger.LogError("Error de la base de datos en la Edicion de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
+        }
+    }
+
+    public IActionResult BajaPedido(int id)
+    {
+        var rol = HttpContext.Session.GetInt32("Rol");
+            if (rol == null)
+            {
+               return RedirectToAction("Login","Login");
+            }
+        try
+        {
+            var pedido = _repoPedidos.GetById(id);
+            PedidoViewModel pedidoVM = _mapper.Map<PedidoViewModel>(pedido);
+            var cliente = _repoClientes.GetById(pedidoVM.ClienteID);
+            pedidoVM.NombreCliente = cliente.Nombre;
+            pedidoVM.DireccionCliente = cliente.Direccion;
+            var cadete = _repoCadetes.GetById(pedidoVM.CadeteID);
+            pedidoVM.NombreCadete = cadete.Nombre;
+            return View(pedidoVM);
+        }
+        catch (System.Exception)
+        {
+            _logger.LogError("Error de la base de datos en la Edicion de Pedidos");
+            return RedirectToAction("DataBaseError","Cadetes");
+        }
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -17,12 +17,12 @@ namespace Cadeteria.ViewModels
         private string direccion;
         private string telefono;
 
-        [Required]
+        [Required(ErrorMessage = "El Nombre es obligatorio")]
         public string Nombre { get => nombre; set => nombre = value; }
-        [Required]
+        [Required(ErrorMessage = "La direccion es obligatoria")]
         public string Direccion { get => direccion; set => direccion = value; }
-        [Required]
-        [Phone]
+        [Required(ErrorMessage = "El telefono es obligatorio")]
+        [Phone(ErrorMessage = "Ingrese un numero valido")]
         public string Telefono { get => telefono; set => telefono = value; }
         public int Id { get => id; set => id = value; }
     }

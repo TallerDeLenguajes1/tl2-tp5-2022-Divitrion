@@ -1,0 +1,42 @@
+@model Cadeteria.ViewModels.CadeteViewModel
+
+@{
+    ViewData["Title"] = "Dar de baja un Cadete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-grid gap-3">
+    <div class="row">
+        <h1 class="text-center col">@ViewData["Title"]</h1>
+        <h4>Cadete a borrar</h4>
+    </div>
+    <div>
+        <table class="table table-bordered table-hover shadow p-3 mb-5 rounded">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>CantPedidos</th>
+                    </tr>
+                </thead>
+                <tbody class="table-striped text-center">
+                    <tr>
+                        <td>@Model.Id</td>
+                        <td>@Model.Nombre</td>
+                        <td>@Model.Telefono</td>
+                        <td>@Model.Direccion</td>
+                        <td>@Model.listadoPedidos.Count()</td>
+                    </tr>
+                </tbody>
+            </table>
+        <form asp-action="BorrarCadete">
+            <input type="hidden" name="id" value=@Model.Id />
+            <div class="d-flex justify-content-evenly align-middle">
+            <input type="submit" value="Borrar" class="btn btn-primary btn-sm" style="background-color:#866BBF; border-color:#866BBF;" />
+            <a asp-action="Listado" class="btn btn-warning text-dark" style="background-color:#C7B3F2; border-color:#C7B3F2">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>

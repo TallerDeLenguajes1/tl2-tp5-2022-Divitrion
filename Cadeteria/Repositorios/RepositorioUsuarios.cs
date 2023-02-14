@@ -12,55 +12,82 @@ namespace Cadeteria.Repositorios
         private string cadenaConexion = "Data Source=DB/PedidosDB.db;Cache=Shared";
         public Usuario getUser(string username, string password)
         {
-            SqliteConnection connection = new SqliteConnection(cadenaConexion);
-            SqliteCommand command = connection.CreateCommand();
-            var usuario = new Usuario();
-            command.CommandText = $"SELECT id, nombre, usuario, rol FROM Usuarios WHERE usuario = '{username}' AND password = '{password}' AND Activo = {1}";
-            connection.Open();
-            using(SqliteDataReader reader = command.ExecuteReader())
+            try
             {
+                SqliteConnection connection = new SqliteConnection(cadenaConexion);
+                SqliteCommand command = connection.CreateCommand();
+                var usuario = new Usuario();
+                command.CommandText = $"SELECT id, nombre, usuario, rol FROM Usuarios WHERE usuario = '{username}' AND password = '{password}' AND Activo = {1}";
+                connection.Open();
+                using(SqliteDataReader reader = command.ExecuteReader())
+                {
                 while (reader.Read())
                 {
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.Nombre = reader["nombre"].ToString();
                     usuario.Rol = Convert.ToInt32(reader["rol"]);
-                    usuario.Username = reader["usuario"].ToString();;
+                    usuario.Username = reader["usuario"].ToString();
                 }
             }
             connection.Close();
+
+            if (usuario.Nombre == null)
+                {
+                    throw new Exception();
+                }
+
             return usuario;
+                
+            }
+            catch (System.Exception)
+            {
+                return new Usuario();
+            }
         }
 
-        public void CreateUser(string nombre, int rol, string usuario)
+        public void CreateUser(string nombre, int rol, string usuario, string password)
         {
-            var query = $"INSERT INTO Usuarios (nombre, usuario, password, rol, Activo) VALUES (@nombre,@usuario,@password,@rol,@activo)";
-            using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
+            try
             {
+                var query = $"INSERT INTO Usuarios (nombre, usuario, password, rol, Activo) VALUES (@nombre,@usuario,@password,@rol,@activo)";
+                using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
+                {
 
-                connection.Open();
-                var command = new SqliteCommand(query, connection);
+                    connection.Open();
+                    var command = new SqliteCommand(query, connection);
 
-                command.Parameters.Add(new SqliteParameter("@nombre", nombre));
-                command.Parameters.Add(new SqliteParameter("@rol", rol));
-                command.Parameters.Add(new SqliteParameter("@usuario", usuario));
-                command.Parameters.Add(new SqliteParameter("@password", usuario));
-                command.Parameters.Add(new SqliteParameter("@activo", 1));
+                    command.Parameters.Add(new SqliteParameter("@nombre", nombre));
+                    command.Parameters.Add(new SqliteParameter("@rol", rol));
+                    command.Parameters.Add(new SqliteParameter("@usuario", usuario));
+                    command.Parameters.Add(new SqliteParameter("@password", password));
+                    command.Parameters.Add(new SqliteParameter("@activo", 1));
 
-                command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
 
-                connection.Close();   
+                    connection.Close();
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
             }
         }
 
         public void Delete(int id)
         {
-
-            SqliteConnection connection = new SqliteConnection(cadenaConexion);
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"UPDATE Usuarios SET Activo = {0} WHERE id = '{id}';";
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(cadenaConexion);
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = $"UPDATE Usuarios SET Activo = {0} WHERE id = '{id}';";
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }

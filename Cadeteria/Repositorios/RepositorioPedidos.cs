@@ -12,83 +12,123 @@ namespace Cadeteria.Repositorios
         private string cadenaConexion = "Data Source=DB/PedidosDB.db;Cache=Shared";
         public List<Pedido> GetAll()
         {
-            var queryString = $"SELECT * FROM Pedidos WHERE Activo = {1};";
-            List<Pedido> pedidos = new List<Pedido>();
-            using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
+            try
             {
-                SqliteCommand command = new SqliteCommand(queryString, connection);
-                connection.Open();
-            
-                using(SqliteDataReader reader = command.ExecuteReader())
+                var queryString = $"SELECT * FROM Pedidos WHERE Activo = {1};";
+                List<Pedido> pedidos = new List<Pedido>();
+                using (SqliteConnection connection = new SqliteConnection(cadenaConexion))
                 {
-                    while (reader.Read())
+                    SqliteCommand command = new SqliteCommand(queryString, connection);
+                    connection.Open();
+                
+                    using(SqliteDataReader reader = command.ExecuteReader())
                     {
-                        var pedido = new Pedido();
-                        pedido.Nro = Convert.ToInt32(reader["Nro"]);
-                        pedido.Obs = reader["Obs"].ToString();
-                        pedido.Estado = reader["Estado"].ToString();
-                        pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
-                        pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
-                        pedidos.Add(pedido);
+                        while (reader.Read())
+                        {
+                            var pedido = new Pedido();
+                            pedido.Nro = Convert.ToInt32(reader["Nro"]);
+                            pedido.Obs = reader["Obs"].ToString();
+                            pedido.Estado = reader["Estado"].ToString();
+                            pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
+                            pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
+                            pedidos.Add(pedido);
+                        }
                     }
+                    connection.Close();
                 }
-                connection.Close();
+                return pedidos;
             }
-            return pedidos;
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
         }
 
         public Pedido GetById(int idPedido)
         {
-            SqliteConnection connection = new SqliteConnection(cadenaConexion);
-            SqliteDataReader lector;
-            var pedido = new Pedido();
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"SELECT * FROM Pedidos WHERE Nro = '{idPedido}';";
-            connection.Open();
-            using(SqliteDataReader reader = command.ExecuteReader())
+            try
             {
-                while (reader.Read())
+                SqliteConnection connection = new SqliteConnection(cadenaConexion);
+                SqliteDataReader lector;
+                var pedido = new Pedido();
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = $"SELECT * FROM Pedidos WHERE Nro = '{idPedido}';";
+                connection.Open();
+                using(SqliteDataReader reader = command.ExecuteReader())
                 {
-                    pedido.Nro = Convert.ToInt32(reader["Nro"]);
-                    pedido.Obs = reader["Obs"].ToString();
-                    pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
-                    pedido.Estado = reader["Estado"].ToString();
-                    pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
+                    while (reader.Read())
+                    {
+                        pedido.Nro = Convert.ToInt32(reader["Nro"]);
+                        pedido.Obs = reader["Obs"].ToString();
+                        pedido.ClienteID = Convert.ToInt32(reader["ClienteId"]);
+                        pedido.Estado = reader["Estado"].ToString();
+                        pedido.CadeteID = Convert.ToInt32(reader["CadeteId"]);
+                    }
                 }
-            }
-            connection.Close();
+                connection.Close();
 
-            return (pedido);
+                return (pedido);
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
         }
 
         public void Create(Pedido pedido)
         {
-            SqliteConnection connection = new SqliteConnection(cadenaConexion);
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"INSERT INTO Pedidos (Obs, ClienteId, Estado, CadeteId, Activo) VALUES ('{pedido.Obs}', '{pedido.ClienteID}', '{pedido.Estado}', '{pedido.CadeteID}', '{1}');";
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(cadenaConexion);
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = $"INSERT INTO Pedidos (Obs, ClienteId, Estado, CadeteId, Activo) VALUES ('{pedido.Obs}', '{pedido.ClienteID}', '{pedido.Estado}', '{pedido.CadeteID}', '{1}');";
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
         }
 
         public void Update(Pedido pedido)
         {
-            SqliteConnection connection = new SqliteConnection(cadenaConexion);
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"UPDATE Pedidos SET Obs = '{pedido.Obs}', Estado = '{pedido.Estado}',  ClienteId = '{pedido.ClienteID}', CadeteId = '{pedido.CadeteID}' WHERE Nro = '{pedido.Nro}';";
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(cadenaConexion);
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = $"UPDATE Pedidos SET Obs = '{pedido.Obs}', Estado = '{pedido.Estado}',  ClienteId = '{pedido.ClienteID}', CadeteId = '{pedido.CadeteID}' WHERE Nro = '{pedido.Nro}';";
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (System.Exception)
+            {
+                throw;
+                
+            }
         }
 
         public void Delete(int id)
         {
-            SqliteConnection connection = new SqliteConnection(cadenaConexion);
-            SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"UPDATE Pedidos SET Activo = {0} WHERE Nro = '{id}';";
-            connection.Open();
-            command.ExecuteNonQuery();
-            connection.Close();
+            try
+            {
+                SqliteConnection connection = new SqliteConnection(cadenaConexion);
+                SqliteCommand command = connection.CreateCommand();
+                command.CommandText = $"UPDATE Pedidos SET Activo = {0} WHERE Nro = '{id}';";
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            
+            }
 
         }
     }

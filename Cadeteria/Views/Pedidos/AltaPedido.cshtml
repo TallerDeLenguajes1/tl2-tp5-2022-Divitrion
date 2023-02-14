@@ -5,37 +5,39 @@
     List<SelectListItem> listadoClientes = (List<SelectListItem>)ViewBag.listadoClientes;
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div>
-    <form asp-action="AltaPedido" asp-controller="Pedidos" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <section class="form-group">
-            <label asp-for="ClienteID" class="control-label">Seleccione un Cliente: </label>
-            @Html.DropDownList("ClienteID",listadoClientes, "Cliente...", new { @class="form-select"})
-            @* <select id="ClienteID" name="ClienteID" asp-items="listadoClientes" class="form-control"></select> *@
-            <span asp-validation-for="ClienteID" class="text-danger"></span>
-        </section>
-        <section class="form-group">
-            <label asp-for="Obs" class="control-label">Observacion: </label>
-            <input type="text" name="Obs" class="form-control">
-            <span asp-validation-for="Obs" class="text-danger"></span>
-        </section>
-        <section class="form-group">
-            <label asp-for="Estado" class="control-label">Estado del Pedido: </label>
-            <select class="form-control" id="Estado" name="Estado">
-                <option value="En Curso">En Curso</option>
-                <option value="Entregado">Entregado</option>
-                <option value="Pendiente">Pendiente</option>
-            </select>
-            <span asp-validation-for="Estado" class="text-danger"></span>
-        </section>
-        <section class="form-group">
-            <label asp-for="CadeteID" class="control-label">Seleccione un Cadete: </label>
-            @Html.DropDownList("CadeteID",listadoCadetes, "Cadete...", new { @class="form-select"})
-            @* <select id="CadeteID" name="ClienteID" asp-items="listadoCadetes" class="form-control"></select> *@
-            <span asp-validation-for="CadeteID" class="text-danger"></span>
-        </section>
-            <input type="submit" value="Enviar" class="btn btn-primary">
-    </form>
+<div class="d-grid gap-3">
+    <div class="row">
+        <h1 class="text-center col">@ViewData["Title"]</h1>
+    </div>
+    <div class="d-flex justify-content-center align-middle">
+        <form asp-action="AltaPedido" asp-controller="Pedidos" method="post" class="d-grid gap-3 border border-3 box-shadow mb-3" style="padding: 2em; border-radius: 25px; border-color:#866BBF !important;">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <section class="form-group">
+                <label asp-for="ClienteID" class="control-label">Seleccione un Cliente: </label>
+                @Html.DropDownList("ClienteID",listadoClientes, "Cliente...", new { @class="form-select", @style="border-color:#C7B3F2"})
+                <span asp-validation-for="ClienteID" class="text-danger"></span>
+                <a asp-action="AltaCliente" asp-controller="Clientes">Crear cliente</a>
+            </section>
+            <section class="form-group">
+                <label asp-for="Obs" class="control-label">Observacion: </label>
+                <input type="text" name="Obs" class="form-control" style="border-color:#C7B3F2">
+                <span asp-validation-for="Obs" class="text-danger"></span>
+            </section>
+            <section class="form-group">
+                <label asp-for="Estado" class="control-label">Estado del Pedido: </label>
+                <select class="form-control" id="Estado" name="Estado" style="border-color:#C7B3F2">
+                    <option value="En Curso">En Curso</option>
+                    <option value="Entregado">Entregado</option>
+                    <option value="Pendiente">Pendiente</option>
+                </select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </section>
+            <section class="form-group">
+                <label asp-for="CadeteID" class="control-label">Seleccione un Cadete: </label>
+                @Html.DropDownList("CadeteID",listadoCadetes, "Cadete...", new { @class="form-select", @style="border-color:#C7B3F2"})
+                <span asp-validation-for="CadeteID" class="text-danger"></span>
+            </section>
+                <input type="submit" value="Enviar" class="btn btn-primary" style="background-color:#866BBF; border-color:#866BBF">
+        </form>
+    </div>
 </div>

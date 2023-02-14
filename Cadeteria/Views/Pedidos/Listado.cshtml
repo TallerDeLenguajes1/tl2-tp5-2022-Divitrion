@@ -1,47 +1,57 @@
 @model List<Cadeteria.ViewModels.PedidoViewModel>
 @{
-    ViewData["Title"] = "Listado";
+    ViewData["Title"] = "Listado de Pedidos";
 }
-
-<h1>@ViewData["Title"]</h1>
-
-<table class="table table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Pedido nro</th>
-            <th>Estado</th>
-            <th>Cliente</th>
-            <th>Direccion</th>
-            <th>Obs</th>
-            <th>Cadete Asignado</th>
-        </tr>
-    </thead>
-    <tbody class="table-striped" >
-        @foreach (var pedido in Model)
-        {
-            <tr>
-                <td>@pedido.Nro</td>
-                <td>@pedido.Estado</td>
-                <td>@pedido.NombreCliente</td>
-                <td>@pedido.DireccionCliente</td>
-                <td>@pedido.Obs</td>
-                <td>@pedido.CadeteID</td>
-                <td>@using(Html.BeginForm("BorrarPedido", "Pedidos", FormMethod.Get))
-                    {
-                        <input type="hidden" name="id" value=@pedido.Nro >
-                        <input type="submit" value="Borrar" class="btn btn-primary">
-                    }</td>
-                <td>@using(Html.BeginForm("EditarPedido", "Pedidos", FormMethod.Get))
-                    {
-                        <input type="hidden" name="id" value=@pedido.Nro >
-                        <input type="hidden" name="Clienteid" value=@pedido.ClienteID >
-                        <input type="submit" value="Editar" class="btn btn-primary">
-                    }</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<section class="btn-group">
-        <a href="AltaPedido" class="btn btn-primary btn-sm">Agregar Pedido</a>
-</section>
+<div class="d-grid gap-3">
+    <div class="row">
+        <h1 class="text-center col">@ViewData["Title"]</h1>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <section class="btn-group col">
+                    <a href="AltaPedido" class="btn btn-primary btn-sm" style="background-color:#866BBF; border-color:#866BBF;">Agregar Pedido</a>
+        </section>
+        <div class="col"></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow p-3 mb-5 rounded">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>Pedido nro</th>
+                    <th>Estado</th>
+                    <th>Cliente</th>
+                    <th>Direccion</th>
+                    <th>Observacion</th>
+                    <th>Cadete Asignado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-striped text-center" >
+                @foreach (var pedido in Model)
+                {
+                    <tr>
+                        <td>@pedido.Nro</td>
+                        <td>@pedido.Estado</td>
+                        <td>@pedido.NombreCliente</td>
+                        <td>@pedido.DireccionCliente</td>
+                        <td>@pedido.Obs</td>
+                        <td>@pedido.NombreCadete</td>
+                        <td>
+                            <div class="d-flex flex-row justify-content-evenly">
+                                <form asp-action="EditarPedido" asp-controller="Pedidos" method="get">
+                                    <input type="hidden" name="id" value=@pedido.Nro >
+                                    <input type="hidden" name="Clienteid" value=@pedido.ClienteID >
+                                    <input type="submit" value="Editar" class="btn btn-warning text-dark" style="background-color:#C7B3F2; border-color:#C7B3F2">
+                                </form>
+                                <form asp-action="BajaPedido" asp-controller="Pedidos" method="get">
+                                    <input type="hidden" name="id" value=@pedido.Nro >
+                                    <input type="submit" value="Borrar" class="btn btn-dark text-dark" style="background-color:#D6C9F2; border-color:#D6C9F2">
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

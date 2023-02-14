@@ -10,6 +10,7 @@ namespace Cadeteria.Repositorios
     {
         public List<Cliente> GetAll();
         public Cliente GetById(int idCliente);
+        public List<Pedido> GetPedidos(int idCliente);
         public void Create(Cliente cliente);
         public void Update(Cliente cliente);
         public void Delete(int id);

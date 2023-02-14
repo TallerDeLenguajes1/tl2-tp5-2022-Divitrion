@@ -1,4 +1,6 @@
 using Cadeteria.Repositorios;
+using NLog.Web;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +12,9 @@ builder.Services.AddTransient<IRepositorioClientes, RepositorioClientes>();
 builder.Services.AddTransient<IRepositorioUsuarios, RepositorioUsuarios>();
 
 builder.Services.AddDistributedMemoryCache();
+
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 builder.Services.AddSession(options =>
 {

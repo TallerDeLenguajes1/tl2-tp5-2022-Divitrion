@@ -1,0 +1,44 @@
+@model Cadeteria.ViewModels.PedidoViewModel
+
+@{
+    ViewData["Title"] = "Dar de baja un pedido";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-grid gap-3">
+    <div class="row">
+        <h1 class="text-center col">@ViewData["Title"]</h1>
+        <h4>Pedido a borrar</h4>
+    </div>
+    <div>
+        <table class="table table-bordered table-hover shadow p-3 mb-5 rounded">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th>Pedido nro</th>
+                        <th>Estado</th>
+                        <th>Cliente</th>
+                        <th>Direccion</th>
+                        <th>Observacion</th>
+                        <th>Cadete Asignado</th>
+                    </tr>
+                </thead>
+                <tbody class="table-striped text-center">
+                    <tr>
+                        <td>@Model.Nro</td>
+                        <td>@Model.Estado</td>
+                        <td>@Model.NombreCliente</td>
+                        <td>@Model.DireccionCliente</td>
+                        <td>@Model.Obs</td>
+                        <td>@Model.NombreCadete</td>
+                    </tr>
+                </tbody>
+            </table>
+        <form asp-action="BorrarPedido">
+            <input type="hidden" name="id" value=@Model.Nro />
+            <div class="d-flex justify-content-evenly align-middle">
+            <input type="submit" value="Borrar" class="btn btn-primary btn-sm" style="background-color:#866BBF; border-color:#866BBF;" />
+            <a asp-action="Listado" class="btn btn-warning text-dark" style="background-color:#C7B3F2; border-color:#C7B3F2">Volver</a>
+            </div>
+        </form>
+    </div>
+</div>

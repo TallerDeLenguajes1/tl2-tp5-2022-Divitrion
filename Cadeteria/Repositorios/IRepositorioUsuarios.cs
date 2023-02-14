@@ -10,7 +10,7 @@ namespace Cadeteria.Repositorios
     public interface IRepositorioUsuarios
     {
          public Usuario getUser(string username, string password);
-         public void CreateUser(string nombre, int rol, string usuario);
+         public void CreateUser(string nombre, int rol, string usuario, string password);
          public void Delete(int id);
     }
 }

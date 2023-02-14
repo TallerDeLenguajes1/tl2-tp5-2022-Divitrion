@@ -1,53 +1,59 @@
 @model List<Cadeteria.ViewModels.CadeteViewModel>
 @{
-    ViewData["Title"] = "Listado";
+    ViewData["Title"] = "Listado de Cadetes";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<table class="table table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Telefono</th>
-            <th>Direccion</th>
-            <th>CantPedidos</th>
-        </tr>
-    </thead>
-    <tbody class="table-striped" >
-        @foreach (var cadete in Model)
-        {
-            <tr>
-                <td>@cadete.Id</td>
-                <td>@cadete.Nombre</td>
-                <td>@cadete.Telefono</td>
-                <td>@cadete.Direccion</td>
-                <td>@cadete.listadoPedidos.Count()</td>
-                <td>
-                    <div class="btn-group">
-                    @using(Html.BeginForm("Listado", "Pedidos", FormMethod.Get))
-                    {
-                        <input type="hidden" name="id" value=@cadete.Id >
-                        <input type="submit" value="Mostrar Pedidos" class="btn btn-primary">
-                    }
-                    @using(Html.BeginForm("EditarCadete", "Cadetes", FormMethod.Get))
-                    {
-                        <input type="hidden" name="idCadete" value=@cadete.Id >
-                        <input type="submit" value="Editar" class="btn btn-warning">
-                    }
-                    @using(Html.BeginForm("BorrarCadete", "Cadetes", FormMethod.Get))
-                    {
-                        <input type="hidden" name="id" value=@cadete.Id >
-                        <input type="submit" value="Borrar" class="btn btn-danger">
-                    }
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<section class="btn-group">
-        <a href="AltaCadete" class="btn btn-primary btn-sm">Agregar Nuevo</a>
-</section>
+<div class="d-grid gap-3">
+    <div class="row">
+        <h1 class="text-center col">@ViewData["Title"]</h1>
+    </div>
+    <div class="row">
+        <div class="col"></div>
+        <section class="btn-group col">
+                    <a href="AltaCadete" class="btn btn-primary btn-sm text-light" style="background-color:#866BBF; border-color:#866BBF;">Agregar Nuevo</a>
+        </section>
+        <div class="col"></div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow p-3 mb-5 rounded">
+            <thead class="table-dark text-center">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Direccion</th>
+                    <th>CantPedidos</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-striped text-center" >
+                @foreach (var cadete in Model)
+                {
+                    <tr>
+                        <td>@cadete.Id</td>
+                        <td>@cadete.Nombre</td>
+                        <td>@cadete.Telefono</td>
+                        <td>@cadete.Direccion</td>
+                        <td>@cadete.listadoPedidos.Count()</td>
+                        <td>
+                            <div class="d-flex flex-row justify-content-evenly">
+                            <form asp-action="Listado" asp-controller="Pedidos" method="get">
+                                <input type="hidden" name="idCadete" value=@cadete.Id >
+                                <input type="submit" value="Mostrar Pedidos" class="btn btn-primary text-dark" style="background-color:#A38BD9; border-color:#A38BD9">
+                            </form>
+                            <form asp-action="EditarCadete" asp-controller="Cadetes" method="get">
+                                <input type="hidden" name="idCadete" value=@cadete.Id >
+                                <input type="submit" value="Editar" class="btn btn-warning text-dark" style="background-color:#C7B3F2; border-color:#C7B3F2">
+                            </form>
+                            <form asp-action="BajaCadete" asp-controller="Cadetes" method="get">
+                                <input type="hidden" name="id" value=@cadete.Id >
+                                <input type="submit" value="Borrar" class="btn btn-dark text-dark" style="background-color:#D6C9F2; border-color:#D6C9F2">
+                            </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
